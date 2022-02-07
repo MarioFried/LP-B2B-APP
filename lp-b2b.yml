@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lp-b2b-app
+spec:
+  selector:
+    matchLabels:
+      app: lp-b2b-app
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: lp-b2b-app
+    spec:
+      containers:
+        - name: lp-b2b-app
+          image: docker.io/docker2mfried/flask-lp-b2b:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: lp-b2b-service
+spec:
+  selector:
+    app: lp-b2b-app
+  ports:
+    - protocol: "TCP"
+      port: 3000
+      targetPort: 3000
+  type: LoadBalancer
